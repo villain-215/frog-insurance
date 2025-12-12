@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>青蛙 (Frog) | 人生旅途的陪跑員 - 專業保險顧問</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        frogGreen: '#10B981', // 青蛙綠
+                        deepSea: '#1F2937',   // 深海藍
+                        dawnWhite: '#F9FAFB', // 晨曦白
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 15s linear infinite',
+                        'spin-reverse-slow': 'spin 20s linear infinite reverse',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* 全局設定 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- 首頁背景：希望種子粒子特效 --- */
+        .seeds-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .seed {
+            position: absolute;
+            bottom: -20px;
+            background-color: rgba(16, 185, 129, 0.4);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* --- 打字機游標 --- */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #10B981;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* --- 導覽列按鈕特效 --- */
+        .status-badge {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .consult-btn:hover .status-badge {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .consult-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+
+        /* --- New White Tech Contact Section --- */
+        .tech-grid-bg {
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+        }
+
+        .tech-ring {
+            border: 1px dashed rgba(16, 185, 129, 0.3);
+        }
+
+    </style>
+</head>
+<body class="bg-dawnWhite text-deepSea">
+
+    <!-- 導覽列 -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-2xl text-frogGreen"><i class="fa-solid fa-frog"></i></span>
+                    <span class="font-bold text-xl tracking-wide text-deepSea">Frog Insurance</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-gray-600 hover:text-frogGreen transition-colors duration-300">首頁</a>
+                    <a href="#about" class="text-gray-600 hover:text-frogGreen transition-colors duration-300">關於青蛙</a>
+                    <a href="#services" class="text-gray-600 hover:text-frogGreen transition-colors duration-300">專業服務</a>
+                    <a href="#projects" class="text-gray-600 hover:text-frogGreen transition-colors duration-300">開源貢獻</a>
+                    <!-- 預約諮詢按鈕 -->
+                    <a href="https://calendly.com/your-link" target="_blank" class="consult-btn group relative inline-flex items-center gap-2 px-6 py-2 bg-frogGreen text-white rounded-full font-medium transition-all duration-300">
+                        <span class="status-badge flex items-center gap-1 text-xs absolute -left-28 bg-white text-frogGreen px-2 py-1 rounded shadow-sm border border-frogGreen/20">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                            Status: Online
+                        </span>
+                        <span>預約諮詢</span>
+                        <i class="fa-regular fa-comment-dots"></i>
+                    </a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-frogGreen focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-frogGreen">首頁</a>
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-frogGreen">關於青蛙</a>
+                <a href="#services" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-frogGreen">專業服務</a>
+                <a href="#contact" class="block px-3 py-2 text-base font-medium text-frogGreen font-bold">立即預約</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首頁 Hero Section -->
+    <section id="home" class="relative pt-20 h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-green-50 overflow-hidden">
+        <!-- 希望種子特效容器 -->
+        <div id="seeds-container" class="seeds-container"></div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <div class="mb-6 inline-block p-3 rounded-full bg-green-100/50 backdrop-blur-sm border border-green-200">
+                <span class="text-frogGreen font-medium tracking-wider text-sm uppercase">EST. 2024</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-deepSea mb-6 leading-tight">
+                Hi, I am <span class="text-frogGreen">Frog!</span><br>
+                <span class="text-2xl md:text-4xl font-normal mt-4 block text-gray-600 h-16">
+                    <span id="typewriter"></span><span class="cursor">&nbsp;</span>
+                </span>
+            </h1>
+            <p class="mt-4 text-gray-500 max-w-2xl mx-auto text-lg">
+                讓未來更有安全感，讓夢想有落地生根的土壤。
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="#about" class="px-8 py-3 rounded-lg border border-gray-300 text-gray-600 hover:border-frogGreen hover:text-frogGreen transition-all duration-300">
+                    認識青蛙
+                </a>
+                <a href="#contact" class="px-8 py-3 rounded-lg bg-deepSea text-white hover:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300">
+                    開始規劃
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於我 Section -->
+    <section id="about" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- 圖片/形象區 -->
+                <div class="relative">
+                    <div class="absolute -top-4 -left-4 w-24 h-24 bg-green-100 rounded-full opacity-50 z-0"></div>
+                    <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-blue-50 rounded-full opacity-50 z-0"></div>
+                    <!-- 使用 Placeholder 圖片，請替換為您的真實照片 -->
+                    <img src="https://placehold.co/600x600/10B981/ffffff?text=Frog+Photo" alt="青蛙顧問" class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[500px] grayscale hover:grayscale-0 transition-all duration-700">
+                </div>
+
+                <!-- 文字內容區 -->
+                <div>
+                    <h2 class="text-3xl font-bold text-deepSea mb-6">關於 <span class="text-frogGreen">青蛙 (Frog)</span></h2>
+                    <h3 class="text-xl text-gray-600 mb-6 font-medium">「眼光放遠、腳步踏實」</h3>
+                    
+                    <div class="space-y-6 text-gray-600 leading-relaxed">
+                        <p>
+                            嗨，我是青蛙！不只是您的保險顧問，更是您人生旅途的陪跑員。
+                            踏入保險業的這一年，對我來說是一場深刻的蛻變。雖然年資尚淺，但我擁有一顆比任何人都願意傾聽與服務的熱忱之心。
+                        </p>
+                        <p>
+                            我看見保險不單只是白紙黑字的合約，而是在風險來臨時，能為一個家庭撐起的那把傘；是在歲月靜好時，替未來預先種下的希望種子。
+                        </p>
+                        <p>
+                            我不推銷您不需要的商品，而是像朋友一樣，陪您釐清真正的擔憂與夢想。
+                        </p>
+                    </div>
+
+                    <!-- 證照標籤 -->
+                    <div class="mt-8">
+                        <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">專業資格</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-4 py-2 bg-gray-50 text-deepSea rounded-md border border-gray-200 text-sm font-medium hover:border-frogGreen transition-colors"><i class="fa-solid fa-id-card text-frogGreen mr-2"></i>人身保險業務員</span>
+                            <span class="px-4 py-2 bg-gray-50 text-deepSea rounded-md border border-gray-200 text-sm font-medium hover:border-frogGreen transition-colors"><i class="fa-solid fa-globe text-frogGreen mr-2"></i>外幣保險業務員</span>
+                            <span class="px-4 py-2 bg-gray-50 text-deepSea rounded-md border border-gray-200 text-sm font-medium hover:border-frogGreen transition-colors"><i class="fa-solid fa-house-chimney text-frogGreen mr-2"></i>財產保險業務員</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 專業服務 Section -->
+    <section id="services" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-frogGreen font-medium tracking-wider uppercase text-sm">Services</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-deepSea mt-2">為您量身打造的保障</h2>
+                <div class="w-16 h-1 bg-frogGreen mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1: 人身保險 -->
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 group border-t-4 border-transparent hover:border-frogGreen">
+                    <div class="w-14 h-14 bg-green-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-frogGreen transition-colors duration-300">
+                        <i class="fa-solid fa-umbrella text-2xl text-frogGreen group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-deepSea mb-4">人身保險規劃</h3>
+                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                        針對家庭責任進行風險評估。透過壽險保障，確保即使風雨來襲，對家人的愛與責任依然延續，「留愛不留債」。
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-frogGreen mr-2"></i>壽險保障分析</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-frogGreen mr-2"></i>家庭責任轉嫁</li>
+                    </ul>
+                </div>
+
+                <!-- Service 2: 醫療與長照 -->
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 group border-t-4 border-transparent hover:border-frogGreen">
+                    <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors duration-300">
+                        <i class="fa-solid fa-heart-pulse text-2xl text-blue-500 group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-deepSea mb-4">醫療與長照</h3>
+                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                        隨著醫療科技進步，自費項目增加。協助您轉嫁龐大的醫療支出，並規劃長照保障，維護老後的病榻尊嚴，不拖累下一代。
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-blue-500 mr-2"></i>實支實付規劃</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-blue-500 mr-2"></i>長期照顧保障</li>
+                    </ul>
+                </div>
+
+                <!-- Service 3: 儲蓄與資產 -->
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 group border-t-4 border-transparent hover:border-frogGreen">
+                    <div class="w-14 h-14 bg-yellow-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition-colors duration-300">
+                        <i class="fa-solid fa-coins text-2xl text-yellow-500 group-hover:text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-deepSea mb-4">儲蓄與資產累積</h3>
+                    <p class="text-gray-600 mb-4 text-sm leading-relaxed">
+                        善用時間複利的效果，為退休生活或子女教育基金做準備。透過外幣配置分散風險，讓資產穩健增值。
+                    </p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li class="flex items-center"><i class="fa-solid fa-check text-yellow-500 mr-2"></i>退休金流規劃</li>
+                        <li class="flex items-center"><i class="fa-solid fa-check text-yellow-500 mr-2"></i>多元資產配置</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Side Project Section -->
+    <section id="projects" class="py-20 bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-deepSea mb-8 flex items-center">
+                <i class="fa-brands fa-github text-3xl mr-3 text-gray-700"></i> 開源貢獻 & 技術資源
+            </h2>
+            <div class="bg-gray-50 rounded-xl border border-gray-200 p-6 flex flex-col sm:flex-row items-center gap-6 hover:shadow-md transition-shadow">
+                <div class="w-16 h-16 bg-frogGreen rounded-full flex items-center justify-center flex-shrink-0 text-white text-2xl">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="flex-1 text-center sm:text-left">
+                    <h3 class="text-lg font-bold text-deepSea">保險 QA 機器人</h3>
+                    <p class="text-gray-500 text-sm mt-1">
+                        基於專業知識庫構建的 Line Bot，能自動回覆常見的保險疑問，24小時為您解答基礎問題。
+                    </p>
+                </div>
+                <a href="https://lin.ee/Xa4bwJM" target="_blank" class="px-5 py-2 bg-[#06C755] text-white rounded-lg font-medium hover:bg-[#05b34c] transition-colors flex items-center gap-2">
+                    <i class="fa-brands fa-line"></i> 立即體驗
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW: Modern Clean Tech Contact Section -->
+    <section id="contact" class="relative py-28 bg-white overflow-hidden tech-grid-bg">
+        
+        <!-- 背景裝飾元素：柔和的光暈與科技感 -->
+        <div class="absolute top-0 right-0 -mr-40 -mt-40 w-[600px] h-[600px] bg-green-50 rounded-full blur-3xl opacity-60 z-0"></div>
+        <div class="absolute bottom-0 left-0 -ml-40 -mb-40 w-[600px] h-[600px] bg-blue-50 rounded-full blur-3xl opacity-60 z-0"></div>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="glass-card rounded-3xl overflow-hidden flex flex-col md:flex-row relative">
+                
+                <!-- 頂部裝飾條 -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-frogGreen to-teal-400"></div>
+
+                <!-- 左側：感性與理性結合的文案 -->
+                <div class="w-full md:w-1/2 p-10 md:p-14 flex flex-col justify-center">
+                    
+                    <!-- Online Status Badge -->
+                    <div class="flex items-center gap-3 mb-8">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-xs font-bold text-gray-400 tracking-[0.2em] uppercase font-mono">System Status: Ready</span>
+                    </div>
+
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 leading-tight">
+                        像精密的導航，<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-frogGreen to-emerald-600">為未來計算最佳路徑。</span>
+                    </h2>
+                    
+                    <p class="text-gray-600 mb-10 leading-relaxed text-lg font-light">
+                        不需要複雜的程式碼，只需要真誠的對話。我已準備好聆聽您的需求，為您規劃最穩健的風險防護網。
+                    </p>
+
+                    <!-- Modern Tech CTA Button -->
+                    <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+                        <a href="https://calendly.com/your-link" target="_blank" class="group relative px-8 py-4 bg-deepSea text-white rounded-xl overflow-hidden shadow-lg hover:shadow-green-200/50 transition-all duration-300 w-full sm:w-auto text-center">
+                            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-frogGreen to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <span class="relative flex items-center justify-center gap-3 font-medium tracking-wide">
+                                <span>預約青蛙聊聊</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </a>
+                        <span class="text-sm text-gray-400 italic">不推銷，純分享。</span>
+                    </div>
+
+                    <!-- Modern Social Links -->
+                    <div class="mt-12 pt-8 border-t border-gray-100/50">
+                        <div class="flex gap-4">
+                            <a href="#" class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-green-500 hover:border-green-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <i class="fa-brands fa-line text-2xl"></i>
+                            </a>
+                            <a href="#" class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:border-pink-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <i class="fa-brands fa-instagram text-2xl"></i>
+                            </a>
+                             <a href="#" class="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <i class="fa-regular fa-envelope text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：科技與溫度的圖像展示 -->
+                <div class="w-full md:w-1/2 bg-gray-50/50 relative min-h-[400px] flex items-center justify-center overflow-hidden border-l border-white/50">
+                    
+                    <!-- 裝飾：科技光環 (Tech Rings) -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none">
+                        <div class="w-[450px] h-[450px] rounded-full border border-gray-200 animate-spin-slow"></div>
+                        <div class="absolute w-[350px] h-[350px] rounded-full border border-dashed border-gray-300 animate-spin-reverse-slow"></div>
+                        <div class="absolute w-[550px] h-[550px] rounded-full border border-gray-100"></div>
+                    </div>
+
+                    <!-- 圖片容器 -->
+                    <div class="relative z-10 w-64 h-64 md:w-80 md:h-80 rounded-full p-2 bg-white/50 backdrop-blur shadow-2xl animate-float">
+                        <div class="w-full h-full rounded-full overflow-hidden relative">
+                             <!-- 請替換為您的形象照 (建議：穿著休閒西裝，微笑，背景乾淨) -->
+                            <img src="https://placehold.co/600x800/e2e8f0/10B981?text=Frog+Agent" alt="Frog Agent" class="w-full h-full object-cover">
+                        </div>
+                        
+                        <!-- 懸浮數據卡片 1 -->
+                        <div class="absolute -right-4 top-10 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-lg border border-gray-100 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-frogGreen">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-gray-400 uppercase tracking-wider">Protection</div>
+                                <div class="text-sm font-bold text-gray-800">100% Active</div>
+                            </div>
+                        </div>
+
+                         <!-- 懸浮數據卡片 2 -->
+                         <div class="absolute -left-6 bottom-16 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-lg border border-gray-100 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-gray-400 uppercase tracking-wider">Response</div>
+                                <div class="text-sm font-bold text-gray-800">Always Ready</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁腳版權 -->
+    <footer class="bg-white text-gray-400 text-center py-6 text-xs font-light tracking-widest border-t border-gray-100">
+        &copy; 2024 Frog Insurance. Designed for Trust & Future.
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // 1. 生成背景種子 (Seeds)
+        const seedsContainer = document.getElementById('seeds-container');
+        const seedCount = 15;
+
+        for (let i = 0; i < seedCount; i++) {
+            const seed = document.createElement('div');
+            seed.classList.add('seed');
+            // 隨機大小
+            const size = Math.random() * 6 + 4; 
+            seed.style.width = `${size}px`;
+            seed.style.height = `${size}px`;
+            // 隨機位置
+            seed.style.left = `${Math.random() * 100}%`;
+            // 隨機動畫時間
+            seed.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            // 隨機延遲
+            seed.style.animationDelay = `${Math.random() * 5}s`;
+            seedsContainer.appendChild(seed);
+        }
+
+        // 2. 打字機效果
+        const textElement = document.getElementById('typewriter');
+        const phrases = ["不只是保險顧問", "更是您人生旅途的陪跑員", "眼光放遠，腳步踏實"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typeSpeed = 50;
+            } else {
+                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typeSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // 停頓久一點
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        document.addEventListener('DOMContentLoaded', type);
+
+        // 3. Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
